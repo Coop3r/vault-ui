@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Vault Interface</title>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@6.6.2/dist/ethers.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <script defer src="script.js"></script>
+    <style>
+        body {
+            background: #111;
+            color: #eee;
+            font-family: 'Courier New', monospace;
+            padding: 1rem;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 820px;
+            margin-inline: auto;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .card {
+            background: #1c1c1c;
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 0 10px #00f2ff33;
+            flex: 1;
+            min-width: 280px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #00f2ff;
+            margin: 0 0 0.5rem;
+        }
+
+        input,
+        select,
+        button {
+            padding: 0.4rem 0.6rem;
+            margin-top: 0.4rem;
+            font-family: inherit;
+            background: #222;
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 6px;
+        }
+
+        button:hover {
+            background: #00f2ff22;
+        }
+
+        .token-entry {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .token-entry img {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #fff;
+        }
+
+        .status {
+            font-size: 0.9rem;
+            color: gold;
+        }
+
+        #qr canvas {
+            margin-top: 0.5rem;
+        }
+
+        #topBar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .headerValue {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #0ff;
+        }
+
+        code {
+            word-break: break-all;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="topBar">
+        <h1>🔐 Vault</h1>
+        <div>
+            <button id="connectBtn">🔌 Connect Wallet</button>
+            <p id="walletInfo" class="status"></p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="card">
+            <h3>💰 Vault Value</h3>
+            <div id="totalValue" class="headerValue">$0.00</div>
+            <div id="gasEstimate" class="status">⛽ Gas: estimating...</div>
+        </div>
+
+        <div class="card">
+            <h3>📡 Network</h3>
+            <select id="network">
+                <option value="ethereum">Ethereum</option>
+                <option value="polygon">Polygon</option>
+                <option value="base">Base</option>
+            </select>
+        </div>
+
+        <div class="card" id="sweepCard">
+            <h3>💸 Sweep</h3>
+            <button id="sweepBtn">Sweep Vault</button>
+            <p id="sweepStatus" class="status"></p>
+            <div id="sweepAnim"></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>📊 Token Balances</h3>
+        <div id="balance"></div>
+    </div>
+
+    <div class="card" id="whitelistCard">
+        <h3>🧾 Manage Whitelist</h3>
+        <h4>Whitelisted Tokens:</h4>
+        <div id="whitelistDisplay" style="font-size: 0.85rem; line-height: 1.5;"></div>
+        <input type="text" id="tokenInput" placeholder="0xTokenAddress" size="40" />
+        <select id="approveSelect">
+            <option value="true">Approve</option>
+            <option value="false">Remove</option>
+        </select>
+        <button id="updateBtn">Update</button>
+        <p id="updateStatus" class="status"></p>
+    </div>
+
+    <div class="card">
+        <h3>📥 Deposit to Vault</h3>
+        <p>Send tokens or native currency to:</p>
+        <code id="vaultAddress">0x00000b9D6803f438300F2916d0148271Bb7a4c47</code>
+        <br><button onclick="copyVaultAddress()">📋 Copy</button>
+        <div id="qr"></div>
+    </div>
+</body>
+
+</html>
